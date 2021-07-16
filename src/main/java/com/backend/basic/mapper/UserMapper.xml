@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.backend.basic.mapper.UserMapper">
+
+    <resultMap id="userInfo" type="com.backend.basic.entity.UserInfo">
+        <id property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="userName" column="user_name" jdbcType="CHAR"/>
+    </resultMap>
+
+    <insert id="insertUser" parameterType="com.backend.basic.entity.UserInfo">
+        INSERT INTO user
+            (user_id, user_name)
+        VALUES (#{userId}, #{userName})
+    </insert>
+
+    <delete id="deleteUser" parameterType="Integer">
+        delete from user
+        <where>
+            user_id = #{userId}
+        </where>
+    </delete>
+
+    <select id="getAllUser"  resultMap="userInfo">
+        select user_id, user_name
+        from user
+        <trim prefix="where" prefixOverrides="and">
+            <if test="userId != null">
+                user_id = #{userId}
+            </if>
+            <if test="userName != null">
+                user_name = #{userName}
+            </if>
+        </trim>
+    </select>
+
+</mapper>
